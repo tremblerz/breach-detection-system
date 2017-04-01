@@ -1,0 +1,11 @@
+<html>
+<body>
+{{message}}
+<form action="{% url 'login' %}" method="POST">
+{% csrf_token %}
+<input name="usern" type="text"/>
+<input name="passw" type="password"/>
+<input type="submit"/>
+</form>
+</body>
+</html>
