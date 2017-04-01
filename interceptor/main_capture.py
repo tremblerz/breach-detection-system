@@ -79,10 +79,22 @@ class Parser(multiprocessing.Process):
         s_addr = socket.inet_ntoa(ip_header[8])
         d_addr = socket.inet_ntoa(ip_header[9])
         return {'version': version, 'IP_header_length': ihl, 'ttl': ttl,
-                'protocol': protocol, 'SRC_addr': s_addr, 'DST_addr': d_addr}
+                'protocol': protocol, 'SRC_addr': s_addr, 'DST_addr': d_addr,
+                'iph_length': iph_length, }
 
     def parse_TCP(self, parsed_data):
-        pass
+        """Summary
+        
+        Args:
+            parsed_data (TYPE): Description
+        
+        Returns:
+            TYPE: Description
+        """
+        tcp_index = parsed_data['IP']['iph_length'] + ETH_LENGTH
+        tcp_header = packet[tcp_index:tcp_index+20]
+
+        tcp_header = unpack('!HHLLBBHHH' , tcp_header)
     def parse_ICMP(self, parsed_data):
         pass
     def parse_UDP(self, parsed_data):
@@ -92,17 +104,18 @@ class Parser(multiprocessing.Process):
         # print(len(self.packet))
         parsed_data = self.parse_eth()
         if parsed_data['eth_protocol'] == IP_PROTOCOL:
-            parsed_data = self.parse_IP(parsed_data)
-        if parsed_data['protocol'] == TCP_PROTOCOL:
-            parsed_data = self.parse_TCP(parsed_data)
-        elif parsed_data['protocol'] == ICMP_PROTOCOL:
-            parsed_data = self.parse_ICMP(parsed_data)
-        elif parsed_data['protocol'] == UDP_PROTOCOL:
-            parsed_data = self.parse_UDP(parsed_data)
-        else
-            print("Unidentified protocol !")
-        print(parsed_data)
-        pass
+            parsed_data['IP'] = self.parse_IP(parsed_data)
+            if parsed_data['IP']['protocol'] == TCP_PROTOCOL:
+                parsed_data['IP']['TCP'] = self.parse_TCP(parsed_data)
+            elif parsed_data['protocol'] == ICMP_PROTOCOL:
+                parsed_data['IP']['ICMP'] = self.parse_ICMP(parsed_data)
+            elif parsed_data['protocol'] == UDP_PROTOCOL:
+                parsed_data['IP']['UDP'] = self.parse_UDP(parsed_data)
+            else:
+                print("Unidentified protocol !")
+            print(parsed_data)
+        else:
+            pass
 
 
 def main(argv):
