@@ -22,3 +22,6 @@ class CT(models.Model):
 	catg = models.CharField(max_length = 25)
 	geolat = models.FloatField()
 	geolon = models.FloatField()
+class traff(model.Model):
+	timestamp = models.CharField(max_length = 25, default=datetime.now.strftime("%B"))
+	traffic = models.IntegerField()
