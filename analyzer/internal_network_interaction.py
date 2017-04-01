@@ -1,5 +1,6 @@
 import multiprocessing
 from utilities.addresses import *
+from utilities.handlers import file_load
 import networkx as nx
 
 class InternalInteraction(multiprocessing.Process):
@@ -28,5 +29,11 @@ class InternalInteraction(multiprocessing.Process):
         destIP = extractDestIP(self.arg)
         if isPrivateIP(srcIP) and isPrivateIP(destIP):
             #generate_graph(srcIP, destIP)
+            payload = getPayload(self.parsed_packet)
+            if payload is not None:
+                fingerprints = file_load('datasets/shell_commands.txt')
+                print(fingerprints)
+            else:
+                return "Payload is empty"
         else:
             return None

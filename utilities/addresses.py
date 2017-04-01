@@ -1,4 +1,4 @@
-from IPy import IP
+import IPy
 
 def isPrivateIP(ip_address):
     """Summary
@@ -9,7 +9,7 @@ def isPrivateIP(ip_address):
     Returns:
         TYPE: Description
     """
-    return IP(ip_address).iptype() == 'PRIVATE'
+    return IPy.IP(ip_address).iptype() == 'PRIVATE'
 
 def extractSrcIP(parsed_packet):
     """Summary
@@ -32,3 +32,19 @@ def extractDestIP(parsed_packet):
         TYPE: Description
     """
     return parsed_packet['IP']['DST_addr']
+
+def getPayload(parsed_packet):
+    """Summary
+    
+    Args:
+        parsed_packet (TYPE): Description
+    
+    Returns:
+        TYPE: Description
+    """
+    if parsed_packet['IP']['TCP']:
+        payload = parsed_packet['IP']['TCP']['PAYLOAD']
+    elif parsed_packet['IP']['UDP']:
+        payload = parsed_packet['IP']['TCP']['PAYLOAD']
+    else:
+        return None
