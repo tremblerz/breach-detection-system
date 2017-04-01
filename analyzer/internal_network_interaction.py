@@ -49,6 +49,7 @@ class InternalInteraction(multiprocessing.Process):
             if score > 2:
                 print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
                     + cmd_list)
+                query = 
             return score
         else:
             return "Payload is empty"
