@@ -3,9 +3,11 @@ from internal_network_interaction import InternalInteraction
 from external_internal_interaction import ExternalInternalInteraction
 from system_behaviour import SystemBehaviour
 
+
 class analyzerSchedular(multiprocessing.Process):
     """Summary
     """
+
     def __init__(self, arg):
         super(analyzerSchedular, self).__init__()
         self.parsed_packet = arg
