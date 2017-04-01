@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BreachDetectionSystem </title>
+
+    <!-- Bootstrap -->
+     <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static 'nprogress/nprogress.css' %}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static 'iCheck/skins/flat/green.css' %}" rel="stylesheet">
+	
+    <!-- bootstrap-progressbar -->
+    <link href="{% static 'bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static 'jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static 'css/custom.min.css' %}" rel="stylesheet">
+<style>
+.yellow{
+	color:yellow;
+}
+.orange{
+	color:orange;
+}
+.navbar-brand-centered {
+        position: absolute;
+        left: 50%;
+        display: block;
+        width: 40px;
+        text-align: center;
+        background-color: white;
+	color: black;
+    }
+    .navbar>.container .navbar-brand-centered, 
+    .navbar>.container-fluid .navbar-brand-centered {
+        margin-left: -80px;
+    }
+
+</style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body ">
+      <div class="main_container">
+          <div class="navbar-fixed-top ">
+        <div class="col-md-3 left_col ">
+          <div class="left_col scroll-view ">
+<!--start left nav bar -->
+            <div class="navbar nav_title " style="border: 0;">
+              <a href="../bds/" class="site_title"><i class="fa fa-paw"></i> <span>BDS</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>{{name}}</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a href='../bds/'><i class="fa fa-home"></i> Dashboard</a>
+                  </li>
+                  <li><a href='../bds/confirmed.html'><i class="fa fa-bug red"></i> Confirmed Threats </a>
+                  </li>
+		  <li><a href='../bds/suspicious.html'><i class="fa fa-eye yellow"></i> Suspicious Threats </a>
+                  </li>
+                  <li><a href='../bds/TopThreats.html'><i class="fa fa-fire orange"></i> Top Threats</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-file-o"></i>Profile</a>
+                  </li>
+                  <li><a><i class="fa fa-users"></i> Manage unit </a>
+                  </li>  
+                  <li><a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout </a>
+                  </li> 
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->  
+          </div>
+        </div></div>
+<!--end left nav bar -->
+        <!-- top navigation -->
+      <!--  <div class="top_nav navbar-fixed-top">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/img.jpg" alt="">{{name}}
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>
+		
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">3</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>Vaishnav</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Transferring loads of data to non-whitelisted ip.
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>Maurya</span>
+                          <span class="time">5 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Suspicious Threat
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>Vaishnav</span>
+                          <span class="time">6 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Suspicious Threat!!
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>-->
+<div class="container"style="background:white">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand-centered">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <div class="navbar-brand navbar-brand-centered">BDS</div>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="navbar-brand-centered">
+		      
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="#">Notifications</a></li>
+		        <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{name}} <span class=" fa fa-angle-down"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>		        
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+        <!-- /top navigation -->
+{% block content %}
+{% endblock %}
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+   
+    <!-- Bootstrap -->
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'fastclick/lib/fastclick.js' %}"></script>
+    <!-- NProgress -->
+    <script src="{% static 'nprogress/nprogress.js' %}"></script>
+    <!-- Chart.js -->
+    <script src="{% static 'Chart.js/dist/Chart.min.js' %}"></script>
+    <!-- gauge.js -->
+    <script src="{% static 'gauge.js/dist/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'iCheck/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static 'skycons/skycons.js' %}"></script>
+    <!-- Flot -->
+    <script src="{% static 'Flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'Flot/jquery.flot.resize.js' %}"></script>
+    <!-- Flot plugins -->
+    <script src="{% static 'flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static 'flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static 'flot.curvedlines/curvedLines.js' %}"></script>
+    <!-- DateJS -->
+    <script src="{% static 'DateJS/build/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static 'jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static 'jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static 'jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'js/custom.min.js' %}"></script>
+	
