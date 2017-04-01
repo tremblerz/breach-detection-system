@@ -8,7 +8,8 @@ from datetime import datetime
 import multiprocessing
 from struct import unpack
 import socket
-
+from analyzer.core_analyzer import analyzerSchedular
+import time
 
 class Sniffer(multiprocessing.Process):
     """docstring for Sniffer"""
@@ -42,6 +43,7 @@ class Parser(multiprocessing.Process):
     def __init__(self, packet):
         super(Parser, self).__init__()
         self.packet = packet
+        self.parsed_data = None
 
     def parse_eth(self):
         """Summary
@@ -59,10 +61,10 @@ class Parser(multiprocessing.Process):
 
     def parse_IP(self, parsed_data):
         """Summary
-        
+
         Args:
             parsed_data (TYPE): Description
-        
+
         Returns:
             TYPE: Description
         """
@@ -80,25 +82,88 @@ class Parser(multiprocessing.Process):
         d_addr = socket.inet_ntoa(ip_header[9])
         return {'version': version, 'IP_header_length': ihl, 'ttl': ttl,
                 'protocol': protocol, 'SRC_addr': s_addr, 'DST_addr': d_addr,
-                'iph_length': iph_length, }
+                'iph_length': iph_length}
 
     def parse_TCP(self, parsed_data):
         """Summary
-        
+
         Args:
             parsed_data (TYPE): Description
-        
+
         Returns:
             TYPE: Description
         """
         tcp_index = parsed_data['IP']['iph_length'] + ETH_LENGTH
-        tcp_header = packet[tcp_index:tcp_index+20]
+        tcp_header = self.packet[tcp_index:tcp_index+20]
 
-        tcp_header = unpack('!HHLLBBHHH' , tcp_header)
+        tcp_header = unpack('!HHLLBBHHH', tcp_header)
+
+        source_port = tcp_header[0]
+        dest_port = tcp_header[1]
+        sequence = tcp_header[2]
+        acknowledgement = tcp_header[3]
+        doff_reserved = tcp_header[4]
+        tcph_length = doff_reserved >> 4
+
+        return {'source_port': source_port, 'dest_port': dest_port, 'sequence': sequence,
+                'acknowledgement': acknowledgement, 'doff_reserved': doff_reserved,
+                'tcph_length': tcph_length}
+
     def parse_ICMP(self, parsed_data):
-        pass
+        """Summary
+
+        Args:
+            parsed_data (TYPE): Description
+
+        Returns:
+            TYPE: Description
+        """
+        icmp_index = parsed_data['IP']['iph_length'] + ETH_LENGTH
+        icmp_header = self.packet[icmp_index:icmp_index+4]
+
+        # now unpack them :)
+        icmp_header = unpack('!BBH', icmp_header)
+
+        icmp_type = icmp_header[0]
+        code = icmp_header[1]
+        checksum = icmp_header[2]
+
+        return {'icmp_type': icmp_type, 'code': code, 'checksum': checksum}
+
     def parse_UDP(self, parsed_data):
-        pass
+        """Summary
+
+        Args:
+            parsed_data (TYPE): Description
+
+        Returns:
+            TYPE: Description
+        """
+        udp_index = parsed_data['IP']['iph_length'] + ETH_LENGTH
+        udp_header = self.packet[udp_index:udp_index+UDPH_LENGTH]
+
+        # now unpack them :)
+        udp_header = unpack('!HHHH', udp_header)
+
+        source_port = udp_header[0]
+        dest_port = udp_header[1]
+        length = udp_header[2]
+        checksum = udp_header[3]
+
+        return {'source': source_port, 'dest_port': dest_port,
+                'length': length, 'checksum': checksum}
+
+    def parse_application(self, parsed_data, h_size):
+        """Summary
+
+        Args:
+            parsed_data (TYPE): Description
+
+        Returns:
+            TYPE: Description
+        """
+        application_data = self.packet[h_size:]
+        return {'application_data': application_data}
 
     def run(self):
         # print(len(self.packet))
@@ -107,15 +172,23 @@ class Parser(multiprocessing.Process):
             parsed_data['IP'] = self.parse_IP(parsed_data)
             if parsed_data['IP']['protocol'] == TCP_PROTOCOL:
                 parsed_data['IP']['TCP'] = self.parse_TCP(parsed_data)
-            elif parsed_data['protocol'] == ICMP_PROTOCOL:
+                h_size = ETH_LENGTH + parsed_data['IP']['iph_length'] + parsed_data['IP']['TCP']['tcph_length']
+                parsed_data['IP']['TCP']['PAYLOAD'] = self.parse_application(parsed_data, h_size)
+            elif parsed_data['IP']['protocol'] == ICMP_PROTOCOL:
                 parsed_data['IP']['ICMP'] = self.parse_ICMP(parsed_data)
-            elif parsed_data['protocol'] == UDP_PROTOCOL:
+                h_size = ETH_LENGTH + parsed_data['IP']['iph_length'] + ICMPH_LENGTH
+                parsed_data['IP']['ICMP']['PAYLOAD'] = self.parse_application(parsed_data, h_size)
+            elif parsed_data['IP']['protocol'] == UDP_PROTOCOL:
                 parsed_data['IP']['UDP'] = self.parse_UDP(parsed_data)
+                h_size = ETH_LENGTH + parsed_data['IP']['iph_length'] + UDPH_LENGTH
+                parsed_data['IP']['UDP']['PAYLOAD'] = self.parse_application(parsed_data, h_size)
             else:
-                print("Unidentified protocol !")
-            print(parsed_data)
+                print("Unidentified transport layer protocol number " +
+                      str(parsed_data['IP']['protocol']) + "!")
+            #print(parsed_data)
+            self.parsed_data = parsed_data
         else:
-            pass
+            self.parsed_data = "Without ethernet header"
 
 
 def main(argv):
@@ -148,6 +221,9 @@ def main(argv):
                 TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
             parse_object = Parser(packet)
             parse_object.start()
+            time.sleep(3)
+            print(parse_object.parsed_data)
+            analysis = analyzerSchedular()
     else:
         error_message = 'Device specified is not present in the list'
         abort(-1, error_message)
