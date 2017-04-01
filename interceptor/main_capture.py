@@ -187,7 +187,7 @@ class Parser(multiprocessing.Process):
                       str(parsed_data['IP']['protocol']) + "!")
             #print(parsed_data)
             self.parsed_data = parsed_data
-            print("putting in queue")
+            #print("putting in queue")
             self.queue.put(self.parsed_data)
         else:
             self.parsed_data = "Without ethernet header"

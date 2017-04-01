@@ -14,7 +14,7 @@ class analyzerSchedular(multiprocessing.Process):
         self.analysis = {}
 
     def run(self):
-        print(self.parsed_packet)
+        #print(self.parsed_packet)
         internal_analyzer = InternalInteraction(self.parsed_packet)
         external_analyzer = ExternalInternalInteraction(self.parsed_packet)
         system_analyzer = SystemBehaviour(self.parsed_packet)
