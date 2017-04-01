@@ -217,7 +217,10 @@ def main(argv):
                                PROMISCOUS_MODE, CAPTURE_TIMEOUT)
         TOTAL_COUNT = 0
         while(True):
-            (header, packet) = pcap.next()
+            try:
+                (header, packet) = pcap.next()
+            except socket.timeout:
+                continue
             TOTAL_COUNT += 1
             queue = multiprocessing.Queue()
             print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
