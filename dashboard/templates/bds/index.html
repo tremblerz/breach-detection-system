@@ -8,7 +8,11 @@
 <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 
-
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;}
+</style>
         <div class="right_col" role="main">
           <!-- top tiles -->
           <div class="row tile_count">
@@ -52,7 +56,18 @@
 
           </div>
           <br/>
-
+	  <div>
+		<table style="width:100%">
+		  <tr>
+			<th>S.No</th>
+    			<th>Src_IP</th>
+    			<th>Dest_IP</th>
+    			<th>TimeStamp</th>
+			<th>Comprimised_MAC</th>
+  		 </tr>
+		 
+		</table>
+	  </div>
           <div class="row">
 
 
@@ -726,7 +741,7 @@ var temp=-1.9;
 
  jQuery(window).on("resize", function(event) {
         var chartDiv = jQuery("#chartdiv"); 
-        var chart = chartDiv.data("kendoChart");
+        //var chart = chartDiv.data("kendoChart");
         
         // Temporarily disable animation, yo!
         chart.options.transitions = false;
