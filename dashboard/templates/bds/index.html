@@ -7,7 +7,13 @@
 <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
 <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-
+<script>
+var glo=0;
+function f(){
+	glo+=1
+	return glo;
+}
+</script>
 <style>
 table, th, td {
     border: 1px solid black;
@@ -18,18 +24,15 @@ table, th, td {
           <div class="row tile_count">
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>High suspision warnings</span>
-              <div class="count red">2500</div>
-              <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+				<div class="count red">{{count.mal}}</div>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-clock-o"></i>Medium Suspision Warnings</span>
-              <div class="count yellow"style="color:orange">123.50</div>
-              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+              <div class="count yellow"style="color:orange">{{count.sus}}</div>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Normal Packets</span>
-              <div class="count green">2,500</div>
-              <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+              <div class="count green">{{count.nor}}</div>
             </div>
           </div>
           <!-- /top tiles -->
@@ -59,13 +62,31 @@ table, th, td {
 	  <div>
 		<table style="width:100%">
 		  <tr>
-			<th>S.No</th>
+			  <th>Sr.No</th>
     			<th>Src_IP</th>
     			<th>Dest_IP</th>
     			<th>TimeStamp</th>
 			<th>Comprimised_MAC</th>
   		 </tr>
-		 
+		 {% if val %}
+		{% for i in val %}
+		<tr>
+			<td>{{i.0}}</td>
+			<td>
+			{{i.2}}
+			</td>
+			<td>
+			{{i.3}}
+			</td>
+			<td>
+			{{i.1}}
+			</td>
+			<td>
+			{{i.4}}
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
 		</table>
 	  </div>
           <div class="row">
