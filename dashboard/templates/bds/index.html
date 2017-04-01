@@ -45,7 +45,7 @@
                   </div>
                 </div>
                 <div class="col-md-12 col-sm-14 col-xs-12 bg-white " >
-                <div id="chartdiv" style="min-height: 500px;width:1100px"></div>
+                <div id="chartdiv" name="chartdiv" style="min-height: 500px"></div>
                 </div>
               </div>
             
@@ -165,7 +165,7 @@
               </div>
             </div>
 
-            <div class="col-md-4 col-sm-4 col-xs-12">
+           <!-- <div class="col-md-4 col-sm-4 col-xs-12">
               <div class="x_panel tile fixed_height_320 overflow_hidden">
                 <div class="x_title">
                   <h2>Device Usage</h2>
@@ -454,11 +454,11 @@
                 </div>
 
               </div>-->
-              <div class="row">
+              <!--<div class="row">
 
 
                 <!-- Start to do list -->
-                <div class="col-md-6 col-sm-6 col-xs-12">
+               <!-- <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="x_panel">
                     <div class="x_title">
                      <!-- <h2>To Do List <small>Sample tasks</small></h2>
@@ -520,14 +520,14 @@
                               <input type="checkbox" class="flat"> Copy backups to offsite location</p>
                           </li>
                         </ul>
-                      </div>-->
+                      </div>
                     </div>
                   </div>
                 </div>
                 <!-- End to do list -->
                 
                 <!-- start of weather widget -->
-                <div class="col-md-6 col-sm-6 col-xs-12">
+               <!-- <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="x_panel">
                     <div class="x_title">
                       <h2>Daily active users <small>Sessions</small></h2>
@@ -624,7 +624,7 @@
                             <h3 class="degrees">26</h3>
                             <canvas height="32" width="32" id="cloudy"></canvas>
                             <h5>10 <i>km/h</i></h5>
-                          </div>-->
+                          </div>-
                         </div>
                         <div class="clearfix"></div>
                       </div>
@@ -724,7 +724,19 @@ var temp=-1.9;
  }
 );
 
+ jQuery(window).on("resize", function(event) {
+        var chartDiv = jQuery("#chartdiv"); 
+        var chart = chartDiv.data("kendoChart");
+        
+        // Temporarily disable animation, yo!
+        chart.options.transitions = false;
 
+        // Temporarily hide, then set size of chart to container (which will naturally resize itself), then show it again 
+        chartDiv.css({ display:"none" });
+        chartDiv.css({ width:chartDiv.parent().innerWidth(), display:"block" });
+   
+        chart.redraw();   
+    });
 </script>
 
 {% endblock %}
