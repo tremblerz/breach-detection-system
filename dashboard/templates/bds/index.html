@@ -663,67 +663,6 @@ var chart = AmCharts.makeChart("chartdiv", {
     "useGraphSettings": true,
     "markerSize": 10
     },
-    "dataProvider": [{
-        "year": "Jan",
-        "mal": 6.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Feb",
-        "mal": 2.6,
-        "sus": 2.7,
-        "nor": 2.2
-    }, {
-        "year": "Mar",
-        "mal": 2.8,
-        "sus": 2.9,
-        "nor": 2.4
-    }, {
-        "year": "Apr",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "May",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Jun",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Jul",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Aug",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Sep",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Oct",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Nov",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, {
-        "year": "Dec",
-        "mal": 2.5,
-        "sus": 2.5,
-        "nor": 2.1
-    }, ],
     "valueAxes": [{
         "stackType": "regular",
         "axisAlpha": 0.3,
@@ -767,16 +706,23 @@ var chart = AmCharts.makeChart("chartdiv", {
     "export": {
       "enabled": true
      }
-
 });
+var temp=-1.9;
+ $.ajax({
+            url: '/bds/random',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+        })
+        .success(function(val) {
+            temp=val;
+            chart.dataProvider=temp;
+            //chart.dataProvider[i].nor = val['value'];
+ }
+);
 
-
-
-for (var i = 0; i <= nor_percent.length-1; i++) {
-  chart.dataProvider[i].nor = nor_percent[i]*10^4;
-  chart.dataProvider[i].sus = sus_percent[i]*10^4;
-  chart.dataProvider[i].mal = mal_percent[i]*10^4;
-}
 
 </script>
 
