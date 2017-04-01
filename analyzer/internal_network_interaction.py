@@ -1,7 +1,9 @@
 import multiprocessing
 from utilities.addresses import *
 from utilities.handlers import file_load
-import networkx as nx
+import re
+#import networkx as nx
+
 
 class InternalInteraction(multiprocessing.Process):
     """docstring for InternalInteraction"""
@@ -9,31 +11,42 @@ class InternalInteraction(multiprocessing.Process):
     def __init__(self, arg):
         super(InternalInteraction, self).__init__()
         self.parsed_packet = arg
-        #self.graph = 
+        # self.graph =
 
     def generate_graph(self):
         """Summary
-        
+
         Returns:
             TYPE: Description
         """
-        pass        
+        pass
 
     def run(self):
         """Summary
-        
+
         Returns:
             TYPE: Description
         """
-        srcIP = extractSrcIP(self.arg)
-        destIP = extractDestIP(self.arg)
-        if isPrivateIP(srcIP) and isPrivateIP(destIP):
-            #generate_graph(srcIP, destIP)
-            payload = getPayload(self.parsed_packet)
-            if payload is not None:
-                fingerprints = file_load('datasets/shell_commands.txt')
-                print(fingerprints)
-            else:
-                return "Payload is empty"
+        srcIP = extractSrcIP(self.parsed_packet)
+        destIP = extractDestIP(self.parsed_packet)
+        # if True:
+        #generate_graph(srcIP, destIP)
+        payload = getPayload(self.parsed_packet)
+        # print(self.parsed_packet)
+        if payload is not None:
+            fingerprints = file_load(
+                '/home/abhi/Downloads/CourseMaterial/Networking/Information_Security/projects/breach-detection-system/datasets/shell_commands.txt')
+            #print(fingerprints)
+            score = 0
+            for command in fingerprints:
+                match_obj = re.match(command, payload['application_data'], re.M)
+                if match_obj:
+                    score += 1
+                else:
+                    pass
+            print("score is " + str(score))
+            return score
         else:
-            return None
+            return "Payload is empty"
+        # else:
+            # return None

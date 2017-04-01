@@ -17,5 +17,8 @@ def file_load(filename):
     Returns:
         TYPE: Description
     """
-    file_data = pickle.load(filename)
-    return file_data
+    with open(filename) as f:
+        content = f.readlines()
+    content = [x.strip() for x in content]
+    content = filter(None, content)
+    return content
