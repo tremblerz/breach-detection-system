@@ -1,8 +1,9 @@
 import multiprocessing
 from analyzer.IP2LocationPythonmaster.IP2Location import IP2Location
 import numpy as np
+import os
 
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class ExternalInternalInteraction(multiprocessing.Process):
     """docstring for ExternalInternalInteraction"""
@@ -22,13 +23,13 @@ class ExternalInternalInteraction(multiprocessing.Process):
     def find_region(self, ip):
     	dest_ip = self.parse_dest_ip()
     	IP2locObj = IP2Location()
-    	IP2locObj.open("/home/abhi/Downloads/CourseMaterial/Networking/Information_Security/projects/breach-detection-system/analyzer/IP2LocationPythonmaster/data/IP-COUNTRY.BIN")
+    	IP2locObj.open(BASE_DIR + "/datasets/IP-COUNTRY.BIN")
     	country = IP2locObj.get_all(dest_ip)
     	return country.country_long
 
     def check_ip_vuln(self, country, ip):
 		newDict = {}
-		f = open('/home/abhi/Downloads/CourseMaterial/Networking/Information_Security/projects/breach-detection-system/analyzer/data/vuln_countries.txt', 'r')
+		f = open(BASE_DIR + '/datasets/vuln_countries.txt', 'r')
 		for line in f:
 			splitLine = line.split()
 			newDict[splitLine[0]] = ' '.join(splitLine[1:])
@@ -41,11 +42,8 @@ class ExternalInternalInteraction(multiprocessing.Process):
 			return 0
     def run(self):
     	dest_ip = self.parse_dest_ip()
-    	#print(dest_ip)
     	country = self.find_region(dest_ip)
-    	print(country)	
     	vuln = self.check_ip_vuln(country, dest_ip)
-    	#src_ip = self.parse_src_ip()
     	if vuln == 1:
             print("[DANGER] Potential threat:")
     		#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
