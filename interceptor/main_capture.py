@@ -40,10 +40,10 @@ class Sniffer(multiprocessing.Process):
 class Parser(multiprocessing.Process):
     """docstring for Wait"""
 
-    def __init__(self, packet):
+    def __init__(self, queue, packet):
         super(Parser, self).__init__()
         self.packet = packet
-        self.parsed_data = None
+        self.queue = queue
 
     def parse_eth(self):
         """Summary
@@ -187,6 +187,8 @@ class Parser(multiprocessing.Process):
                       str(parsed_data['IP']['protocol']) + "!")
             #print(parsed_data)
             self.parsed_data = parsed_data
+            print("putting in queue")
+            self.queue.put(self.parsed_data)
         else:
             self.parsed_data = "Without ethernet header"
 
@@ -217,13 +219,14 @@ def main(argv):
         while(True):
             (header, packet) = pcap.next()
             TOTAL_COUNT += 1
+            queue = multiprocessing.Queue()
             print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
                 TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
-            parse_object = Parser(packet)
+            parse_object = Parser(queue, packet)
             parse_object.start()
-            time.sleep(3)
-            print(parse_object.parsed_data)
-            analysis = analyzerSchedular()
+            
+            analysis = analyzerSchedular(queue.get())
+            analysis.start()
     else:
         error_message = 'Device specified is not present in the list'
         abort(-1, error_message)

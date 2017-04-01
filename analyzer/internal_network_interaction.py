@@ -5,3 +5,6 @@ class InternalInteraction(multiprocessing.Process):
     def __init__(self, arg):
         super(InternalInteraction, self).__init__()
         self.arg = arg
+
+    def run(self):
+        pass
