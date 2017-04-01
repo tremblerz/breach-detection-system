@@ -224,16 +224,11 @@ def main(argv):
                 TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
             parse_object = Parser(queue, packet)
             parse_object.start()
-            
-            """while queue.empty():
-                continue"""
 
             parsed_data = queue.get()
             if parsed_data == "without ethernet header":
                 print("data " + parsed_data)
             else:
-                #print(parsed_data)
-                #print("\n\n")
                 analysis = analyzerSchedular(parsed_data)
                 analysis.start()
     else:
