@@ -16,16 +16,43 @@
           <!-- /top tiles -->
 
 
-          <div class="right_col" role="main">
+          <div class="right_col" role="main" >
           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
               
                  
 		<div id="chartdiv"></div>												              </div>
-            </div>
-
-          </div>
-          <br/>
+			  </div><br/>
+<table style="width:100%">
+		  <tr>
+			  <th>Sr.No</th>
+    			<th>Src_IP</th>
+    			<th>Dest_IP</th>
+    			<th>TimeStamp</th>
+			<th>Comprimised_MAC</th>
+  		 </tr>
+		 {% if val %}
+		{% for i in val %}
+		<tr>
+			<td>{{i.0}}</td>
+			<td>
+			{{i.2}}
+			</td>
+			<td>
+			{{i.3}}
+			</td>
+			<td>
+			{{i.1}}
+			</td>
+			<td>
+			{{i.4}}
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+		</table>
+          
+</div>
 
     <script>
 /*
