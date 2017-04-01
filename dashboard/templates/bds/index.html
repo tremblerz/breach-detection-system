@@ -2,6 +2,13 @@
 {% block content %} 
 <!-- page content -->
           <br>          <br>
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+
         <div class="right_col" role="main">
           <!-- top tiles -->
           <div class="row tile_count">
@@ -24,9 +31,7 @@
           <!-- /top tiles -->
 
           <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="dashboard_graph">
-
+            <div class="col-md-12 col-sm-12 col-xs-1 .rows">
                 <div class="row x_title">
                   <div class="col-md-6">
                     <h3>Network Activities <small>Graph title sub-title</small></h3>
@@ -36,12 +41,14 @@
                       <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                       <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
                     </div>
+
                   </div>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
+                <div class="col-md-12 col-sm-14 col-xs-12 bg-white " >
+                <div id="chartdiv" style="min-height: 500px;width:1100px"></div>
                 </div>
               </div>
-            </div>
+            
 
           </div>
           <br/>
@@ -631,4 +638,146 @@
           </div>
         </div>
         <!-- /page content -->
+
+<script>
+
+
+var nor_percent = []; 
+var sus_percent = []; 
+var mal_percent = [];
+for (var i = 0; i < 12; i++) {
+  nor_percent[i] = Math.random().toFixed(4) * 10**4;
+  sus_percent[i] = Math.random().toFixed(4) * 10**4;
+  mal_percent[i] = Math.random().toFixed(4) * 10**4;
+}
+//document.getElementById('ran').innerHTML = a;
+
+
+var chart = AmCharts.makeChart("chartdiv", {
+    "type": "serial",
+  "theme": "dark",
+    "legend": {
+        "horizontalGap": 100,
+        "maxColumns": 1,
+        "position": "right",
+    "useGraphSettings": true,
+    "markerSize": 10
+    },
+    "dataProvider": [{
+        "year": "Jan",
+        "mal": 6.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Feb",
+        "mal": 2.6,
+        "sus": 2.7,
+        "nor": 2.2
+    }, {
+        "year": "Mar",
+        "mal": 2.8,
+        "sus": 2.9,
+        "nor": 2.4
+    }, {
+        "year": "Apr",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "May",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Jun",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Jul",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Aug",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Sep",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Oct",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Nov",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, {
+        "year": "Dec",
+        "mal": 2.5,
+        "sus": 2.5,
+        "nor": 2.1
+    }, ],
+    "valueAxes": [{
+        "stackType": "regular",
+        "axisAlpha": 0.3,
+        "gridAlpha": 0
+    }],
+    "graphs": [{
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:15px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Malicious Packets",
+        "type": "column",
+    "color": "#000000",
+        "valueField": "mal"
+    }, {
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:15px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 1.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Suspicious Packets",
+        "type": "column",
+    "color": "#000000",
+        "valueField": "sus"
+    }, {
+        "balloonText": "<b>[[title]]</b><br><span style='font-size:15px'>[[category]]: <b>[[value]]</b></span>",
+        "fillAlphas": 0.8,
+        "labelText": "[[value]]",
+        "lineAlpha": 0.3,
+        "title": "Normal Packets",
+        "type": "column",
+    "color": "#000000",
+        "valueField": "nor"
+    }],
+    "categoryField": "year",
+    "categoryAxis": {
+        "gridPosition": "start",
+        "axisAlpha": 0,
+        "gridAlpha": 0,
+        "position": "left"
+    },
+    "export": {
+      "enabled": true
+     }
+
+});
+
+
+
+for (var i = 0; i <= nor_percent.length-1; i++) {
+  chart.dataProvider[i].nor = nor_percent[i]*10^4;
+  chart.dataProvider[i].sus = sus_percent[i]*10^4;
+  chart.dataProvider[i].mal = mal_percent[i]*10^4;
+}
+
+</script>
+
 {% endblock %}
