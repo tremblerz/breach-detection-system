@@ -1,9 +1,12 @@
 import multiprocessing
 from analyzer.IP2LocationPythonmaster.IP2Location import IP2Location
 import numpy as np
-#from utilites.sqlite import *
+
+
+
 class ExternalInternalInteraction(multiprocessing.Process):
     """docstring for ExternalInternalInteraction"""
+
     def __init__(self, arg):
         super(ExternalInternalInteraction, self).__init__()
         self.arg = arg
@@ -50,4 +53,3 @@ class ExternalInternalInteraction(multiprocessing.Process):
             print("Normal traffic")
     		#inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
         pass
-
