@@ -12,7 +12,7 @@ def login_v(request):
 			return redirect("index")
 		else:
 			message="Wromg Credentials"
-	return render(request,'login_v.html',{'message':message})
+	return render(request,'bds/login_v.html',{'message':message})
 
 def logout_v(request):
 	logout(request)
