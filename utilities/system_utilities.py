@@ -14,3 +14,18 @@ def abort(error_code=-1, error_message=None):
     if error_message is not None:
         print("Aborting: " + error_message)
     sys.exit(error_code)
+
+def quit(signum, frame, message=None):
+    """Summary
+    
+    Args:
+        error_message (None, optional): Description
+    
+    Returns:
+        TYPE: Description
+    """
+    if message is not None:
+        print(message)
+    else:
+        print("\nBye\n")
+    sys.exit(1)
