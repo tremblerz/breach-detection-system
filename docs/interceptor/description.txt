@@ -1,0 +1,10 @@
+##Interceptor
+####Interceptor captures the ongoing traffic on a system with the help of packet capture library libpcap for UNIX systems and WinPcap for Windows. Various filters and parsers do the job of retrieving useful information out of the packet. Currently python-pcapy package is being used to achieve the purpose of packet capture. Few of the reasons for choosing pcapy library are -
+* Works with Python threads.
+* Functions in both UNIX with libpcap and Windows with WinPcap.
+* Provides a simpler Object Oriented API.
+
+### 1. About sniffing interface -
+####  In this breach detection system we are performing packet sniffing in promiscuous mode. Quoting directly from tcpdump's documentation about [non]promiscuous sniffing -
+>In standard, non-promiscuous sniffing, a host is sniffing only traffic that is directly related to it. Only traffic to, from, or routed through the host will be picked up by the sniffer. Promiscuous mode, on the other hand, sniffs all traffic on the wire. In a non-switched environment, this could be all network traffic. The obvious advantage to this is that it provides more packets for sniffing.
+
