@@ -9,5 +9,7 @@ class TimeBehaviour(multiprocessing.Process):
         self.parsed_packet = arg
         self.full_data = full_data
 
-    def run(self):
+    def find_by_src(self):
         pass
+    def run(self):
+        find_by_src()
