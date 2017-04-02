@@ -18,10 +18,10 @@ class Packet(models.Model):
 	breach_confidence = models.IntegerField()
 	Com_MAC = models.CharField(max_length = 19,default="0.0.0.0")
 class CT(models.Model):
-	pac = models.ForeignKey(Packet, on_delete = models.CASCADE)
-	catg = models.CharField(max_length = 25)
-	geolat = models.FloatField()
-	geolon = models.FloatField()
+	srcIP = models.CharField(max_length = 25,default="0.0.0.0")
+	desIP = models.CharField(max_length = 25,default="0.0.0.0") 
+	breach_confidence = models.IntegerField(default=0)
+	cod = models.CharField(max_length = 3,default="IN")
 class traff(models.Model):
 	timestamp = models.CharField(max_length = 25, default=datetime.now().strftime("%B"))
 	traffic = models.IntegerField()

@@ -7,5 +7,5 @@ urlpatterns=[
 	url(r'^TopThreats', views.TopThreats, name="TopThreats"),
 	url(r'^login',views.login_v,name="login"),
 	url(r'^logout',views.logout_v,name='logout'),
-    url(r'^random',views.valueret,name='random'),
+	url(r'^random',views.valueret,name='random'),
 ]

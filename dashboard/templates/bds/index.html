@@ -24,15 +24,15 @@ table, th, td {
           <div class="row tile_count">
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>High suspision warnings</span>
-				<div class="count red">{{count.mal}}</div>
+				<div id="mal" class="count red"></div>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-clock-o"></i>Medium Suspision Warnings</span>
-              <div class="count yellow"style="color:orange">{{count.sus}}</div>
+              <div id="sus" class="count yellow"style="color:orange"></div>
             </div>
             <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i>Normal Packets</span>
-              <div class="count green">{{count.nor}}</div>
+              <div id="nor" class="count green"></div>
             </div>
           </div>
           <!-- /top tiles -->
@@ -759,6 +759,22 @@ var temp=-1.9;
             //chart.dataProvider[i].nor = val['value'];
  }
 );
+$(document).ready(function(e)
+				 {
+	count={"sus":0,"mal":0,"nor":0}
+	
+	for(var i=0;i<temp.length;i++)
+		{
+			count["sus"]+=temp[i]["sus"];
+			count["nor"]+=temp[i]["nor"];
+			count["mal"]+=temp[i]["mal"];
+		}
+	$("#mal").text(count["mal"]);
+	$("#nor").text(count["nor"]);
+	$("#sus").text(count["sus"]);
+}
+				 
+				 );
 
  jQuery(window).on("resize", function(event) {
         var chartDiv = jQuery("#chartdiv"); 
