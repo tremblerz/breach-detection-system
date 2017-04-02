@@ -29,6 +29,7 @@ class ExternalInternalInteraction(multiprocessing.Process):
 
     def check_ip_vuln(self, country, ip):
 		newDict = {}
+		
 		f = open(BASE_DIR + '/datasets/vuln_countries.txt', 'r')
 		for line in f:
 			splitLine = line.split()
@@ -36,20 +37,34 @@ class ExternalInternalInteraction(multiprocessing.Process):
 		check_country = self.find_region(ip)
 		
 		#return newDict["2"]
+		with open(BASE_DIR + '/data/malicious_ips.txt', 'r') as f1:
+			newLine = f1.read().split('\n')
 		if check_country == newDict["1"] or check_country == newDict["2"]:
-			return 1
-		else:
-			return 0
+			if ip in newLine:
+				return 'Malware Detected'
+			else:
+				return 'Suspicious Activity'
+		if check_country == newDict["3"] or check_country == newDict["4"] or check_country == newDict["5"]:
+			if ip in newLine:
+				return 'Malware Detected'
+			else:
+				return 'Less probable malware'
     def run(self):
     	dest_ip = self.parse_dest_ip()
+    	#print(dest_ip)
+    	# print(self.arg)
     	country = self.find_region(dest_ip)
     	vuln = self.check_ip_vuln(country, dest_ip)
-    	if vuln == 1:
-            pass
-            #print("[DANGER] Potential threat:")
-    		#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
-    	else:
-            pass
-            #print("Normal traffic")
-            #inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
-            
+    	#src_ip = self.parse_src_ip()
+    	if vuln == 'Malware Detected':
+            print("[DANGER] Confirmed threat:")
+    	# 	#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
+    	if vuln == 'Suspicious Activity':
+            print("Suspicious Behavior")
+        if vuln == 'Less probable malware':
+        	print("Less suspicious behavior")
+        else:
+        	print("Normal behavior")
+     	#print(vuln)
+    		#inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
+        pass
