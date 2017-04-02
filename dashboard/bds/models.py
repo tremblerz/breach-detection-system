@@ -17,6 +17,9 @@ class Packet(models.Model):
 	destination = models.CharField(max_length = 25)
 	breach_confidence = models.IntegerField()
 	mac = models.CharField(max_length = 19,default="0.0.0.0")
+	dst_port = models.IntegerField()
+	src_port = models.IntegerField()
+	ttl = models.IntegerField()
 class CT(models.Model):
 	pac = models.ForeignKey(Packet, on_delete = models.CASCADE)
 	catg = models.CharField(max_length = 25)
