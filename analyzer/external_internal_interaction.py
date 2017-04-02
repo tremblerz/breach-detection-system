@@ -2,6 +2,7 @@ import multiprocessing
 from analyzer.IP2LocationPythonmaster.IP2Location import IP2Location
 import numpy as np
 import os
+import time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,9 +17,9 @@ class ExternalInternalInteraction(multiprocessing.Process):
     	dest_ip = self.arg["IP"]["DST_addr"]
     	return dest_ip
 
-    """def parse_src_ip(self):
-    	src_ip = self.arg["IP"]["IP_addr"]
-    	return src_ip"""
+    def parse_src_ip(self):
+    	src_ip = self.arg["IP"]["SRC_addr"]
+    	return src_ip
 
     def find_region(self, ip):
     	dest_ip = self.parse_dest_ip()
@@ -37,7 +38,7 @@ class ExternalInternalInteraction(multiprocessing.Process):
 		check_country = self.find_region(ip)
 		
 		#return newDict["2"]
-		with open(BASE_DIR + '/data/malicious_ips.txt', 'r') as f1:
+		with open(BASE_DIR + '/analyzer/data/malicious_ips.txt', 'r') as f1:
 			newLine = f1.read().split('\n')
 		if check_country == newDict["1"] or check_country == newDict["2"]:
 			if ip in newLine:
@@ -55,14 +56,17 @@ class ExternalInternalInteraction(multiprocessing.Process):
     	# print(self.arg)
     	country = self.find_region(dest_ip)
     	vuln = self.check_ip_vuln(country, dest_ip)
-    	#src_ip = self.parse_src_ip()
+    	src_ip = self.parse_src_ip()
     	if vuln == 'Malware Detected':
+            query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), src_ip, dest_ip, str(int(4)), self.arg['dst_mac_addr'])
             print("[DANGER] Confirmed threat:")
     	# 	#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
     	if vuln == 'Suspicious Activity':
+            query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), src_ip, dest_ip, str(int(1)), self.arg['dst_mac_addr'])
             print("Suspicious Behavior")
         if vuln == 'Less probable malware':
         	print("Less suspicious behavior")
+            #query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), srcIP, destIP, str(int(0)), self.parsed_packet['dst_mac_addr'])
         else:
         	print("Normal behavior")
      	#print(vuln)

@@ -31,11 +31,11 @@ def index(request):
 	k=0
 	if request.user.is_authenticated:
 		name = request.user
-		all_obj = Packet.objects.all()
+		all_obj = Packet.objects.all()[:20]
 		for i in all_obj:
-			if i.breach_confidence<30:
+			if i.breach_confidence<20:
 				count["nor"] += 1
-			elif 30>=i.breach_confidence<60:
+			elif 20<=i.breach_confidence<80:
 				count["sus"] += 1
 			else:
 				count["mal"] += 1
@@ -62,7 +62,7 @@ def valueret(request):
 		if i.timestamp.strftime("%b") in dic:
 			if i.breach_confidence<30:
 				dic[i.timestamp.strftime("%b")]["nor"] += 1
-			elif 30>=i.breach_confidence<60:
+			elif 20<=i.breach_confidence<60:
 				dic[i.timestamp.strftime("%b")]["sus"] += 1
 			else:
 				dic[i.timestamp.strftime("%b")]["mal"] += 1
@@ -70,7 +70,7 @@ def valueret(request):
 			dic[i.timestamp.strftime("%b")] = {"nor":0,"sus":0,"mal":0}
 			if i.breach_confidence<30:
 				dic[i.timestamp.strftime("%b")]["nor"] += 1
-			elif 30>=i.breach_confidence<60:
+			elif 30<=i.breach_confidence<60:
 				dic[i.timestamp.strftime("%b")]["sus"] += 1
 			else:
 				dic[i.timestamp.strftime("%b")]["mal"] += 1
