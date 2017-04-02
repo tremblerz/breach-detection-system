@@ -8,4 +8,5 @@ urlpatterns=[
 	url(r'^login',views.login_v,name="login"),
 	url(r'^logout',views.logout_v,name='logout'),
 	url(r'^random',views.valueret,name='random'),
+	url(r'^map_data',view.map_data, name='map_data'),
 ]
