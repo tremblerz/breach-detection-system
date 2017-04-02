@@ -22,3 +22,8 @@ def execute_query(query):
         pass
     connection.commit()
     cursor.close()
+
+def get_data(query):
+    cursor = connection.cursor()
+    cursor.execute(query)
+    return cursor

@@ -59,16 +59,18 @@ class ExternalInternalInteraction(multiprocessing.Process):
     	src_ip = self.parse_src_ip()
     	if vuln == 'Malware Detected':
             query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), src_ip, dest_ip, str(int(4)), self.arg['dst_mac_addr'])
-            print("[DANGER] Confirmed threat:")
+            #print("[DANGER] Confirmed threat:")
     	# 	#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
     	if vuln == 'Suspicious Activity':
             query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), src_ip, dest_ip, str(int(1)), self.arg['dst_mac_addr'])
-            print("Suspicious Behavior")
+            #print("Suspicious Behavior")
         if vuln == 'Less probable malware':
-        	print("Less suspicious behavior")
+            pass
+        	#print("Less suspicious behavior")
             #query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), srcIP, destIP, str(int(0)), self.parsed_packet['dst_mac_addr'])
         else:
-        	print("Normal behavior")
+            pass
+        	#print("Normal behavior")
      	#print(vuln)
     		#inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
         pass

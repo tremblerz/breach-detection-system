@@ -1,6 +1,8 @@
 from utilities.system_utilities import abort
 from utilities.handlers import handle_ctrl_c
 from utilities.characters import eth_addr
+from utilities.sqlite import execute_query, get_data
+from utilities.addresses import get_src_port, get_dest_port
 import pcapy
 from parameters import *
 import sys
@@ -150,7 +152,7 @@ class Parser(multiprocessing.Process):
         length = udp_header[2]
         checksum = udp_header[3]
 
-        return {'source': source_port, 'dest_port': dest_port,
+        return {'source_port': source_port, 'dest_port': dest_port,
                 'length': length, 'checksum': checksum}
 
     def parse_application(self, parsed_data, h_size):
@@ -190,6 +192,21 @@ class Parser(multiprocessing.Process):
             self.parsed_data = "Without ethernet header"
         self.queue.put(self.parsed_data)
 
+def order_data(previous_data):
+    full_data = []
+    for row in previous_data:
+        old_packet = {}
+        old_packet['source'] = row[0]
+        old_packet['destination'] = row[1]
+        old_packet['dst_mac'] = row[2]
+        old_packet['timestamp'] = row[3]
+        old_packet['dst_port'] = row[4]
+        old_packet['src_port'] = row[5]
+        old_packet['ttl'] = row[6]
+        old_packet['src_mac'] = row[7]
+        full_data.append(old_packet)
+    return full_data
+
 def main(argv):
     """Summary
 
@@ -213,6 +230,10 @@ def main(argv):
         pcap = pcapy.open_live(device_capture, SNAPLEN,
                                PROMISCOUS_MODE, CAPTURE_TIMEOUT)
         TOTAL_COUNT = 0
+
+        query = "SELECT * FROM bds_packet;"
+        previous_data = get_data(query)
+        previous_data = order_data(previous_data)
         while(True):
             try:
                 (header, packet) = pcap.next()
@@ -220,18 +241,26 @@ def main(argv):
                 continue
             TOTAL_COUNT += 1
             queue = multiprocessing.Queue()
-            print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
-                TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
+            #print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
+                #TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
             parse_object = Parser(queue, packet)
             parse_object.start()
-
             parsed_data = queue.get()
+
             if parsed_data == "Without ethernet header":
                 #print("data " + parsed_data)
                 pass
             else:
+                dst_port = get_dest_port(parsed_data)
+                print(dst_port)
+                src_port = get_src_port(parsed_data)
+                query = "INSERT INTO bds_packet (timestamp, source, destination, src_mac, dst_mac, dst_port, src_port, ttl) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (str(time.strftime("%d/%m/%Y")), 
+                    parsed_data['IP']['SRC_addr'], parsed_data['IP']['DST_addr'],
+                    str(parsed_data['src_mac_addr']), str(parsed_data['dst_mac_addr']), str(dst_port)
+                    ,str(src_port), str(parsed_data['IP']['ttl']))
+                execute_query(query)
                 #print(parsed_data)
-                analysis = analyzerSchedular(parsed_data)
+                analysis = analyzerSchedular(parsed_data, previous_data)
                 analysis.start()
     else:
         error_message = 'Device specified is not present in the list'

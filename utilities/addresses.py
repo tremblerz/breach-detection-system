@@ -3,6 +3,19 @@
 from struct import unpack
 from socket import AF_INET, inet_pton
 
+def get_src_port(parsed_packet):
+    if 'TCP' in parsed_packet['IP']:
+        return parsed_packet['IP']['TCP']['source_port']
+    elif 'UDP' in parsed_packet['IP']:
+        return parsed_packet['IP']['UDP']['source_port']
+def get_dest_port(parsed_packet):
+    if 'TCP' in parsed_packet['IP']:
+        return parsed_packet['IP']['TCP']['dest_port']
+    elif 'UDP' in parsed_packet['IP']:
+        return parsed_packet['IP']['UDP']['dest_port']
+    else:
+        return None
+
 def lookup(ip_address):
     """Summary
     
