@@ -8,10 +8,6 @@ class admins(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	dept = models.CharField(max_length = 10)
 class Packet(models.Model):
-	"""docstring for Packet
-	def __init__(self, arg):
-		super(Packet, self).__init__()
-		self.arg = arg"""
 	timestamp = models.DateTimeField(auto_now_add=True)	
 	srcIP = models.CharField(max_length = 25)
 	desIP = models.CharField(max_length = 25)
