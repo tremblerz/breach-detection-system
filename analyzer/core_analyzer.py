@@ -1,7 +1,7 @@
 import multiprocessing
 from internal_network_interaction import InternalInteraction
 from external_internal_interaction import ExternalInternalInteraction
-from system_behaviour import SystemBehaviour
+from behaviour import SystemBehaviour
 from temporal_analyzer import TimeBehaviour
 
 

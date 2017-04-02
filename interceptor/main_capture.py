@@ -195,15 +195,16 @@ class Parser(multiprocessing.Process):
 def order_data(previous_data):
     full_data = []
     for row in previous_data:
+        #print(row)
         old_packet = {}
-        old_packet['source'] = row[0]
-        old_packet['destination'] = row[1]
-        old_packet['dst_mac'] = row[2]
-        old_packet['timestamp'] = row[3]
-        old_packet['dst_port'] = row[4]
-        old_packet['src_port'] = row[5]
-        old_packet['ttl'] = row[6]
-        old_packet['src_mac'] = row[7]
+        old_packet['source'] = row[1]
+        old_packet['destination'] = row[2]
+        old_packet['dst_mac'] = row[3]
+        old_packet['timestamp'] = row[4]
+        old_packet['dst_port'] = row[5]
+        old_packet['src_port'] = row[6]
+        old_packet['ttl'] = row[7]
+        old_packet['src_mac'] = row[8]
         full_data.append(old_packet)
     return full_data
 
