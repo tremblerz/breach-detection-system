@@ -185,13 +185,10 @@ class Parser(multiprocessing.Process):
             else:
                 print("Unidentified transport layer protocol number " +
                       str(parsed_data['IP']['protocol']) + "!")
-            #print(parsed_data)
             self.parsed_data = parsed_data
-            #print("putting in queue")
-            self.queue.put(self.parsed_data)
         else:
             self.parsed_data = "Without ethernet header"
-
+        self.queue.put(self.parsed_data)
 
 def main(argv):
     """Summary
@@ -217,20 +214,29 @@ def main(argv):
                                PROMISCOUS_MODE, CAPTURE_TIMEOUT)
         TOTAL_COUNT = 0
         while(True):
-            (header, packet) = pcap.next()
+            try:
+                (header, packet) = pcap.next()
+            except socket.timeout:
+                continue
             TOTAL_COUNT += 1
             queue = multiprocessing.Queue()
-            print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
-                TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
+            #print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
+                #TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
             parse_object = Parser(queue, packet)
             parse_object.start()
-            
-            analysis = analyzerSchedular(queue.get())
-            analysis.start()
+
+            parsed_data = queue.get()
+            if parsed_data == "Without ethernet header":
+                #print("data " + parsed_data)
+                pass
+            else:
+                print(parsed_data)
+                analysis = analyzerSchedular(parsed_data)
+                analysis.start()
     else:
         error_message = 'Device specified is not present in the list'
         abort(-1, error_message)
 
 if __name__ == "__main__":
-    handle_ctrl_c()
+    #handle_ctrl_c()
     main(sys.argv)

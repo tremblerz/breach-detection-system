@@ -36,6 +36,7 @@ def extractSrcIP(parsed_packet):
     Returns:
         TYPE: Description
     """
+    #print(parsed_packet)
     return parsed_packet['IP']['SRC_addr']
 
 def extractDestIP(parsed_packet):
@@ -47,6 +48,7 @@ def extractDestIP(parsed_packet):
     Returns:
         TYPE: Description
     """
+    #print(parsed_packet)
     return parsed_packet['IP']['DST_addr']
 
 def getPayload(parsed_packet):

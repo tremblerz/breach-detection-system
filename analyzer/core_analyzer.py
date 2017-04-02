@@ -23,4 +23,4 @@ class analyzerSchedular(multiprocessing.Process):
         self.analysis['external'] = external_analyzer.start()
         self.analysis['system'] = system_analyzer.start()
 
-        print(self.analysis)
+        #print(self.analysis)

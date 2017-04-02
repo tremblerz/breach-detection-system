@@ -2,6 +2,8 @@ import multiprocessing
 from utilities.addresses import *
 from utilities.handlers import file_load
 import re
+from datetime import datetime
+from utilities.sqlite import execute_query
 #import networkx as nx
 
 
@@ -46,11 +48,18 @@ class InternalInteraction(multiprocessing.Process):
                     cmd_list += ", " + command
                 else:
                     pass
-            if score > 2:
-                print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
-                    + cmd_list)
-            return score
+            if score > 0:
+                score = (score/5)*100
+                #print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
+                    #+ cmd_list)
+                query = "INSERT INTO bds_packet (timestamp, srcIP, desIP, breach_confidence, Com_MAC) VALUES ('" + str(datetime.now()) + "','" + srcIP + "','" + destIP + "','" + str(score) + "','" + self.parsed_packet['dst_mac_addr'] + "')"
+                #print("[DEBUG]: " + query)
+                #execute_query(query)
+            #return score
+            else:
+                pass
         else:
-            return "Payload is empty"
+            pass
+            #print("[DEBUG]: Payload is empty")
         # else:
             # return None

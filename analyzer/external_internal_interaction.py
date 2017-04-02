@@ -1,10 +1,9 @@
 import multiprocessing
 from analyzer.IP2LocationPythonmaster.IP2Location import IP2Location
 import numpy as np
+import os
 
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, zero_one_loss
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class ExternalInternalInteraction(multiprocessing.Process):
     """docstring for ExternalInternalInteraction"""
@@ -24,20 +23,21 @@ class ExternalInternalInteraction(multiprocessing.Process):
     def find_region(self, ip):
     	dest_ip = self.parse_dest_ip()
     	IP2locObj = IP2Location()
-    	IP2locObj.open("/home/theprototype/breach-detection-system/analyzer/IP2LocationPythonmaster/data/IP-COUNTRY.BIN")
+    	IP2locObj.open(BASE_DIR + "/datasets/IP-COUNTRY.BIN")
     	country = IP2locObj.get_all(dest_ip)
     	return country.country_long
 
     def check_ip_vuln(self, country, ip):
 		newDict = {}
-		f = open('/home/theprototype/breach-detection-system/analyzer/data/vuln_countries.txt', 'r')
+		
+		f = open(BASE_DIR + '/datasets/vuln_countries.txt', 'r')
 		for line in f:
 			splitLine = line.split()
 			newDict[splitLine[0]] = ' '.join(splitLine[1:])
 		check_country = self.find_region(ip)
 		
 		#return newDict["2"]
-		with open('/home/theprototype/breach-detection-system/analyzer/data/malicious_ips.txt', 'r') as f1:
+		with open(BASE_DIR + '/data/malicious_ips.txt', 'r') as f1:
 			newLine = f1.read().split('\n')
 		if check_country == newDict["1"] or check_country == newDict["2"]:
 			if ip in newLine:
@@ -54,7 +54,6 @@ class ExternalInternalInteraction(multiprocessing.Process):
     	#print(dest_ip)
     	# print(self.arg)
     	country = self.find_region(dest_ip)
-    	print(country)	
     	vuln = self.check_ip_vuln(country, dest_ip)
     	#src_ip = self.parse_src_ip()
     	if vuln == 'Malware Detected':
