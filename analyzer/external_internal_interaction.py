@@ -45,9 +45,11 @@ class ExternalInternalInteraction(multiprocessing.Process):
     	country = self.find_region(dest_ip)
     	vuln = self.check_ip_vuln(country, dest_ip)
     	if vuln == 1:
-            print("[DANGER] Potential threat:")
+            pass
+            #print("[DANGER] Potential threat:")
     		#insert_values(src_ip, dest_ip, 60, 'Potential threat is there')
     	else:
-            print("Normal traffic")
-    		#inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
-        pass
+            pass
+            #print("Normal traffic")
+            #inser_values(src_ip, dest_ip, 20, 'Not a potential threat')
+            
