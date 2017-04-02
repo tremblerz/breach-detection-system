@@ -8,13 +8,15 @@ def get_src_port(parsed_packet):
         return parsed_packet['IP']['TCP']['source_port']
     elif 'UDP' in parsed_packet['IP']:
         return parsed_packet['IP']['UDP']['source_port']
+    else:
+        return 1
 def get_dest_port(parsed_packet):
     if 'TCP' in parsed_packet['IP']:
         return parsed_packet['IP']['TCP']['dest_port']
     elif 'UDP' in parsed_packet['IP']:
         return parsed_packet['IP']['UDP']['dest_port']
     else:
-        return None
+        return 1
 
 def lookup(ip_address):
     """Summary

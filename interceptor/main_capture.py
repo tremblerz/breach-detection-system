@@ -253,7 +253,7 @@ def main(argv):
                 pass
             else:
                 dst_port = get_dest_port(parsed_data)
-                print(dst_port)
+                #print(dst_port)
                 src_port = get_src_port(parsed_data)
                 query = "INSERT INTO bds_packet (timestamp, source, destination, src_mac, dst_mac, dst_port, src_port, ttl) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (str(time.strftime("%d/%m/%Y")), 
                     parsed_data['IP']['SRC_addr'], parsed_data['IP']['DST_addr'],

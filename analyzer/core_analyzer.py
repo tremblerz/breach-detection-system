@@ -14,7 +14,7 @@ class analyzerSchedular(multiprocessing.Process):
         self.parsed_packet = arg
         self.analysis = {}
         self.full_data = full_data
-        print(self.full_data)
+        #print(self.full_data)
 
     def run(self):
         #print(self.parsed_packet)
@@ -26,5 +26,6 @@ class analyzerSchedular(multiprocessing.Process):
         internal_analyzer.start()
         external_analyzer.start()
         system_analyzer.start()
+        temporal_analyzer.start()
 
         #print(self.analysis)

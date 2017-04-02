@@ -52,8 +52,8 @@ class InternalInteraction(multiprocessing.Process):
                 #print(score/5)
                 #print((score/5)*100)
             if score > 0:
-                score = (score/5)*100
-                print(score)
+                score = (score/15)*100
+                #print(score)
                 #print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
                     #+ cmd_list)
                 #query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac, dst_port, src_port, ttl) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), srcIP, destIP, str(int(score)), self.parsed_packet['dst_mac_addr'], str(dst_port), str(src_port), str(ttl))

@@ -53,7 +53,7 @@ class ExternalInternalInteraction(multiprocessing.Process):
     def run(self):
     	dest_ip = self.parse_dest_ip()
     	#print(dest_ip)
-    	# print(self.arg)
+    	print(self.arg)
     	country = self.find_region(dest_ip)
     	vuln = self.check_ip_vuln(country, dest_ip)
     	src_ip = self.parse_src_ip()
