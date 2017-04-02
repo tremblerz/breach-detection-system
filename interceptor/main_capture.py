@@ -220,15 +220,17 @@ def main(argv):
                 continue
             TOTAL_COUNT += 1
             queue = multiprocessing.Queue()
-            print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
-                TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
+            #print("[%d] %s: captured %d bytes, truncated to %d bytes" % (
+                #TOTAL_COUNT, datetime.now(), header.getlen(), header.getcaplen()))
             parse_object = Parser(queue, packet)
             parse_object.start()
 
             parsed_data = queue.get()
-            if parsed_data == "without ethernet header":
-                print("data " + parsed_data)
+            if parsed_data == "Without ethernet header":
+                #print("data " + parsed_data)
+                pass
             else:
+                print(parsed_data)
                 analysis = analyzerSchedular(parsed_data)
                 analysis.start()
     else:
