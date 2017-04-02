@@ -2,7 +2,7 @@ import multiprocessing
 from utilities.addresses import *
 from utilities.handlers import file_load
 import re
-from datetime import datetime
+import time
 from utilities.sqlite import execute_query
 #import networkx as nx
 
@@ -39,22 +39,25 @@ class InternalInteraction(multiprocessing.Process):
             fingerprints = file_load(
                 '/home/abhi/Downloads/CourseMaterial/Networking/Information_Security/projects/breach-detection-system/datasets/shell_commands.txt')
             #print(fingerprints)
-            score = 0
+            score = 1.0
             cmd_list = ""
             for command in fingerprints:
                 #match_obj = re.match(command, payload['application_data'], re.M)
                 if command in payload['application_data']:
-                    score += 1
+                    score += 1.0
                     cmd_list += ", " + command
                 else:
                     pass
+                #print(score)
+                #print(score/5)
+                #print((score/5)*100)
             if score > 0:
                 score = (score/5)*100
-                #print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
-                    #+ cmd_list)
-                query = "INSERT INTO bds_packet (timestamp, srcIP, desIP, breach_confidence, Com_MAC) VALUES ('" + str(datetime.now()) + "','" + srcIP + "','" + destIP + "','" + str(score) + "','" + self.parsed_packet['dst_mac_addr'] + "')"
-                #print("[DEBUG]: " + query)
-                #execute_query(query)
+                print("[BREACH]" + "shell commands found in payload, following commands were executed\n"
+                    + cmd_list)
+                query = "INSERT INTO bds_packet (timestamp, source, destination, breach_confidence, mac) VALUES ('%s', '%s', '%s', '%s', '%s')"%(str(time.strftime("%d/%m/%Y")), srcIP, destIP, str(int(score)), self.parsed_packet['dst_mac_addr'])
+                print("[DEBUG]: " + query)
+                execute_query(query)
             #return score
             else:
                 pass

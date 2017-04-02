@@ -39,7 +39,7 @@ def index(request):
 				count["sus"] += 1
 			else:
 				count["mal"] += 1
-			val.append([k+1,i.timestamp,i.srcIP,i.desIP,i.Com_MAC])
+			val.append([k+1,i.timestamp,i.source,i.destination,i.mac])
 			k+=1
 	else:
 		return redirect('login')

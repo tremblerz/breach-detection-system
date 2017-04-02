@@ -13,10 +13,10 @@ class Packet(models.Model):
 		super(Packet, self).__init__()
 		self.arg = arg"""
 	timestamp = models.DateTimeField(auto_now_add=True)	
-	srcIP = models.CharField(max_length = 25)
-	desIP = models.CharField(max_length = 25)
+	source = models.CharField(max_length = 25)
+	destination = models.CharField(max_length = 25)
 	breach_confidence = models.IntegerField()
-	Com_MAC = models.CharField(max_length = 19,default="0.0.0.0")
+	mac = models.CharField(max_length = 19,default="0.0.0.0")
 class CT(models.Model):
 	pac = models.ForeignKey(Packet, on_delete = models.CASCADE)
 	catg = models.CharField(max_length = 25)
